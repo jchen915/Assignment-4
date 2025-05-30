@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-## Assignment 4: Cohort Analysis
+## Instruction
 
 Create a 4 to 6 page Quarto reproducible report, in prose, in a repository on your GitHub account based on the cohort simulated data that contains the following features:
 
@@ -18,12 +18,19 @@ Create a 4 to 6 page Quarto reproducible report, in prose, in a repository on yo
 -   discussion
 
 ```{r}
+#| label: load-packages
+#| include: false
 library(tidyverse)
+library(dplyr)
+library(gtsummary)
+library(gt)
+```
 
-# Read in the cohort dataset
-cohort <- read.csv("data/cohort.csv")
 
-# Preview
+```{r}
+#| label: load-dataset
+#| include: false
+cohort <- read.csv("cohort.csv")
 glimpse(cohort)
 ```
 
@@ -41,11 +48,9 @@ Briefly explain what this dataset is about and what your analysis aims to show.
 ## Summary Table
 
 ```{r summary-table, message=FALSE, warning=FALSE}
-library(dplyr)
-library(gtsummary)
-library(gt)
-
-cohort <- read.csv("data/cohort.csv")  
+#| label: Summary Table 1
+#| warning: false 
+#| echo: false 
 
 summary_table <- cohort %>%
   select(smoke, female, age, cardiac, cost) %>%
