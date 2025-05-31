@@ -10,13 +10,13 @@ bibliography: references.bib
 
 Create a 4 to 6 page Quarto reproducible report, in prose, in a repository on your GitHub account based on the cohort simulated data that contains the following features:
 
-- introduction section 
+-   introduction section
 
-- methods section with notation 
+-   methods section with notation
 
-- results section with data summary table and at least 2 figures 
+-   results section with data summary table and at least 2 figures
 
-- discussion
+-   discussion
 
 ```{r}
 #| label: load-packages
@@ -27,6 +27,7 @@ library(gtsummary)
 library(gt)
 library(ggeffects) 
 library(ggplot2) 
+library(modelsummary)
 ```
 
 ```{r}
@@ -45,7 +46,17 @@ The relationship between smoking and cardiac events is further complicated by de
 
 The current study utilizes a simulated cohort dataset to examine the association between cigarette smoking and cardiac events, with adjustments for age and gender. By analyzing both binary outcomes (presence of cardiac events) and continuous outcomes (healthcare costs), the study aims to elucidate the multifaceted impact of [**smoking on cardiovascular health**](https://www.thetimes.com/life-style/health-fitness/article/french-paradox-diet-food-france-f28c7pnnl?utm_source=chatgpt.com&region=global) and economic burden.
 
-![An older woman smoking — UNU gender and tobacco](images/old_lady_smoking.png)
+<p align="center">
+
+<img src="images/old_lady_smoking.png" alt="An older woman smoking — UNU gender and tobacco" width="50%"/>
+
+</p>
+
+<p align="center">
+
+<em>Image source: <a href="https://unu.edu/iigh/article/rethinking-tobacco-control-need-gender-responsiveness-tobacco-control-measures">United Nations University: Rethinking Tobacco Control</a></em>
+
+</p>
 
 # Methods
 
@@ -73,7 +84,7 @@ $\beta_1$ and $\alpha_1$ would be our targets of interest.
 
 # Results
 
-## Summary Table
+## Table 1. Summary Data
 
 ```{r summary-table, message=FALSE, warning=FALSE}
 #| label: Summary Table 1
@@ -122,10 +133,8 @@ summary_table %>% as_gt()
 
 ```
 
-## Figure 1. Predicted Probability of Cardiac Events
-
-```{r summary-table, message=FALSE, warning=FALSE}
-#| label: Regression figure 1
+```{r regressions, message=FALSE, warning=FALSE}
+#| label: Regressions
 #| warning: false 
 #| echo: false 
 
@@ -141,6 +150,44 @@ model_cardiac <- glm(
   family = binomial
 )
 
+# Linear regression for cost
+model_cost <- lm(
+  cost ~ smoke * female + age,
+  data = cohort_clean
+)
+```
+
+## Table 2. Regression Results
+
+```{r regression-table, message=FALSE, warning=FALSE}
+#| label: Table 2
+#| warning: false 
+#| echo: false
+
+# Create a named list of models
+models <- list(
+  "Cardiac (Logit)" = model_cardiac,
+  "Cost (Linear)" = model_cost
+)
+
+# Display a clean table
+modelsummary(
+  models,
+  statistic = "({std.error})",        # Display standard errors in parentheses
+  estimate  = "{estimate}{stars}",    # Show stars for significance
+  gof_omit = "AIC|BIC|Log.Lik|RMSE",  # Optional: remove extra fit stats
+  output = "markdown"                 # Good for viewing inside Quarto/RStudio
+)
+```
+
+
+## Figure 1. Predicted Probability of Cardiac Events
+
+```{r figure-1, message=FALSE, warning=FALSE}
+#| label: Regression figure 1
+#| warning: false 
+#| echo: false 
+
 # Predicted probabilities
 pred_cardiac <- ggpredict(model_cardiac, terms = c("smoke", "female"))
 
@@ -155,15 +202,10 @@ plot(pred_cardiac) +
 
 ## Figure 2. Predicted Medical Cost
 
-```{r summary-table, message=FALSE, warning=FALSE}
+```{r figure-2, message=FALSE, warning=FALSE}
 #| label: Regression figure 2
 #| warning: false 
 #| echo: false 
-# Linear regression for cost
-model_cost <- lm(
-  cost ~ smoke * female + age,
-  data = cohort_clean
-)
 
 #Predicted Cost by Smoking & Female
 pred_cost <- ggpredict(model_cost, terms = c("smoke", "female"))
