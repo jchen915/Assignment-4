@@ -32,7 +32,7 @@ library(ggplot2)
 ```{r}
 #| label: load-dataset
 #| include: false
-cohort <- read.csv("cohort.csv")
+cohort <- read.csv("Data/cohort.csv")
 ```
 
 # Introduction
@@ -45,7 +45,7 @@ The relationship between smoking and cardiac events is further complicated by de
 
 The current study utilizes a simulated cohort dataset to examine the association between cigarette smoking and cardiac events, with adjustments for age and gender. By analyzing both binary outcomes (presence of cardiac events) and continuous outcomes (healthcare costs), the study aims to elucidate the multifaceted impact of [**smoking on cardiovascular health**](https://www.thetimes.com/life-style/health-fitness/article/french-paradox-diet-food-france-f28c7pnnl?utm_source=chatgpt.com&region=global) and economic burden.
 
-![An older woman smoking — UNU gender and tobacco](Images/old_lady_smoking.png)
+![An older woman smoking — UNU gender and tobacco](images/old_lady_smoking.png)
 
 # Methods
 
