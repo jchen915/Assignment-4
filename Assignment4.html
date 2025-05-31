@@ -21,7 +21,27 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="Assignment4_files/libs/clipboard/clipboard.min.js"></script>
@@ -99,8 +119,8 @@ window.Quarto = {
 </header>
 
 
-<section id="assignment-4-cohort-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="assignment-4-cohort-analysis">Assignment 4: Cohort Analysis</h2>
+<section id="prompt" class="level2">
+<h2 class="anchored" data-anchor-id="prompt">Prompt</h2>
 <p>Create a 4 to 6 page Quarto reproducible report, in prose, in a repository on your GitHub account based on the cohort simulated data that contains the following features:</p>
 <ul>
 <li><p>introduction section</p></li>
@@ -111,14 +131,32 @@ window.Quarto = {
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
-<p>Briefly explain what this dataset is about and what your analysis aims to show.</p>
+<p>Cigarette smoking remains a leading modifiable risk factor for cardiovascular disease (CVD), contributing to conditions such as coronary heart disease, myocardial infarction, and stroke. The <a href="https://www.cdc.gov/tobacco/about/cigarettes-and-cardiovascular-disease.html?utm_source=chatgpt.com"><strong>Centers for Disease Control and Prevention (CDC)</strong></a> reports that smoking is responsible for one in every four deaths from CVD in the United States. The pathophysiological mechanisms include endothelial dysfunction, inflammation, and atherosclerosis, which collectively elevate the risk of cardiac events<span class="citation" data-cites="Ambrose2004">(<a href="#ref-Ambrose2004" role="doc-biblioref">Ambrose and Barua 2004</a>)</span>.</p>
+<p>Beyond its clinical implications, smoking imposes a substantial economic burden on healthcare systems. A study published in the American Journal of Preventive Medicine estimated that by 2010, 8.7% of annual healthcare spending in the U.S. was attributable to cigarette smoking<span class="citation" data-cites="Xu2021 Xu2015">(<a href="#ref-Xu2021" role="doc-biblioref">Xu et al. 2021</a>, <a href="#ref-Xu2015" role="doc-biblioref">2015</a>)</span>. This financial strain underscores the importance of effective tobacco control measures.</p>
+<p>The relationship between smoking and cardiac events is further complicated by demographic factors, notably age and gender. Research indicates that female smokers have a 25% higher risk of developing coronary heart disease compared to male smokers, even when accounting for similar levels of tobacco exposure<span class="citation" data-cites="Huxley2011">(<a href="#ref-Huxley2011" role="doc-biblioref">Huxley and Woodward 2011</a>)</span>. Additionally, the risk of CVD increases with age, and smoking can exacerbate age-related cardiovascular deterioration<span class="citation" data-cites="Gallucci2020">(<a href="#ref-Gallucci2020" role="doc-biblioref">Gallucci et al. 2020</a>)</span>.</p>
+<p>The current study utilizes a simulated cohort dataset to examine the association between cigarette smoking and cardiac events, with adjustments for age and gender. By analyzing both binary outcomes (presence of cardiac events) and continuous outcomes (healthcare costs), the study aims to elucidate the multifaceted impact of <a href="https://www.thetimes.com/life-style/health-fitness/article/french-paradox-diet-food-france-f28c7pnnl?utm_source=chatgpt.com&amp;region=global"><strong>smoking on cardiovascular health</strong></a> and economic burden.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="Images/old_lady_smoking.png" class="img-fluid figure-img"></p>
+<figcaption>An older woman smoking — UNU gender and tobacco</figcaption>
+</figure>
+</div>
 </section>
 <section id="methods" class="level1">
 <h1>Methods</h1>
-<ul>
-<li>Describe your statistical approach.</li>
-<li>Include notation if applicable (e.g., <span class="math inline">\(\mu\)</span>, <span class="math inline">\(\beta\)</span>, etc.).</li>
-</ul>
+<p>A descriptive summary table was generated to compare participant characteristics by smoking status. Continuous variables (age and medical cost) are presented as means and standard deviations, and categorical variables (sex and cardiac events) are presented as frequencies and percentages.</p>
+<p>Group differences were evaluated using independent two-sample t-tests for continuous variables and chi-square tests for binary variables. P-values are reported in the rightmost column of the table. All summaries were produced using the <code>gtsummary</code> package in R.</p>
+<p>We then fit two separate regression models to estimate the effect of smoking on two outcomes: cardiac events (binary) and medical cost (continuous). In both models, we adjust for age and gender.</p>
+<p>The first model is a <strong>logistic regression</strong> for the binary outcome of adverse cardiac events:</p>
+<p><span class="math display">\[
+\text{Cardiac}_i = \beta_0 + \beta_1 \cdot \text{Smoking}_i + \beta_2 \cdot \text{Female}_i + \beta_3 \cdot \text{Age}_i + \beta_4 \cdot (\text{Smoking}_i \times \text{Female}_i) + \varepsilon_i
+\]</span></p>
+<p>The second model is a <strong>linear regression</strong> for the continuous outcome of medical cost:</p>
+<p><span class="math display">\[
+\text{Cost}_i = \alpha_0 + \alpha_1 \cdot \text{Smoking}_i + \alpha_2 \cdot \text{Female}_i + \alpha_3 \cdot \text{Age}_i + \alpha_4 \cdot (\text{Smoking}_i \times \text{Female}_i) + \varepsilon_i
+\]</span></p>
+<p>In both equations: - <span class="math inline">\(\text{Smoking}_i\)</span> is a binary indicator for whether participant <em>i</em> is a smoker. - <span class="math inline">\(\text{Female}_i\)</span> is a binary indicator for sex (1 = female). - <span class="math inline">\(\text{Age}_i\)</span> is the age in years. - <span class="math inline">\(\text{Smoking}_i \times \text{Female}_i\)</span> is the interaction term - <span class="math inline">\(\varepsilon_i\)</span> is a random error term (in the linear model).</p>
+<p><span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\alpha_1\)</span> would be our targets of interest.</p>
 </section>
 <section id="results" class="level1">
 <h1>Results</h1>
@@ -126,23 +164,23 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="summary-table">Summary Table</h2>
 <div class="cell">
 <div class="cell-output-display">
-<div id="fwmlnvmadz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#fwmlnvmadz table {
+<div id="knwkcvligf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#knwkcvligf table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#fwmlnvmadz thead, #fwmlnvmadz tbody, #fwmlnvmadz tfoot, #fwmlnvmadz tr, #fwmlnvmadz td, #fwmlnvmadz th {
+#knwkcvligf thead, #knwkcvligf tbody, #knwkcvligf tfoot, #knwkcvligf tr, #knwkcvligf td, #knwkcvligf th {
   border-style: none;
 }
 
-#fwmlnvmadz p {
+#knwkcvligf p {
   margin: 0;
   padding: 0;
 }
 
-#fwmlnvmadz .gt_table {
+#knwkcvligf .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -168,12 +206,12 @@ window.Quarto = {
   border-left-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_caption {
+#knwkcvligf .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#fwmlnvmadz .gt_title {
+#knwkcvligf .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -185,7 +223,7 @@ window.Quarto = {
   border-bottom-width: 0;
 }
 
-#fwmlnvmadz .gt_subtitle {
+#knwkcvligf .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -197,7 +235,7 @@ window.Quarto = {
   border-top-width: 0;
 }
 
-#fwmlnvmadz .gt_heading {
+#knwkcvligf .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -209,13 +247,13 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_bottom_border {
+#knwkcvligf .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_col_headings {
+#knwkcvligf .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -230,7 +268,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_col_heading {
+#knwkcvligf .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -250,7 +288,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#fwmlnvmadz .gt_column_spanner_outer {
+#knwkcvligf .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -262,15 +300,15 @@ window.Quarto = {
   padding-right: 4px;
 }
 
-#fwmlnvmadz .gt_column_spanner_outer:first-child {
+#knwkcvligf .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#fwmlnvmadz .gt_column_spanner_outer:last-child {
+#knwkcvligf .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#fwmlnvmadz .gt_column_spanner {
+#knwkcvligf .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -282,11 +320,11 @@ window.Quarto = {
   width: 100%;
 }
 
-#fwmlnvmadz .gt_spanner_row {
+#knwkcvligf .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#fwmlnvmadz .gt_group_heading {
+#knwkcvligf .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -312,7 +350,7 @@ window.Quarto = {
   text-align: left;
 }
 
-#fwmlnvmadz .gt_empty_group_heading {
+#knwkcvligf .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -327,15 +365,15 @@ window.Quarto = {
   vertical-align: middle;
 }
 
-#fwmlnvmadz .gt_from_md > :first-child {
+#knwkcvligf .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#fwmlnvmadz .gt_from_md > :last-child {
+#knwkcvligf .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#fwmlnvmadz .gt_row {
+#knwkcvligf .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -354,7 +392,7 @@ window.Quarto = {
   overflow-x: hidden;
 }
 
-#fwmlnvmadz .gt_stub {
+#knwkcvligf .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -367,7 +405,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#fwmlnvmadz .gt_stub_row_group {
+#knwkcvligf .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -381,15 +419,15 @@ window.Quarto = {
   vertical-align: top;
 }
 
-#fwmlnvmadz .gt_row_group_first td {
+#knwkcvligf .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#fwmlnvmadz .gt_row_group_first th {
+#knwkcvligf .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#fwmlnvmadz .gt_summary_row {
+#knwkcvligf .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -399,16 +437,16 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#fwmlnvmadz .gt_first_summary_row {
+#knwkcvligf .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_first_summary_row.thick {
+#knwkcvligf .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#fwmlnvmadz .gt_last_summary_row {
+#knwkcvligf .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -418,7 +456,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_grand_summary_row {
+#knwkcvligf .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -428,7 +466,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#fwmlnvmadz .gt_first_grand_summary_row {
+#knwkcvligf .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -438,7 +476,7 @@ window.Quarto = {
   border-top-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_last_grand_summary_row_top {
+#knwkcvligf .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -448,11 +486,11 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_striped {
+#knwkcvligf .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#fwmlnvmadz .gt_table_body {
+#knwkcvligf .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -461,7 +499,7 @@ window.Quarto = {
   border-bottom-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_footnotes {
+#knwkcvligf .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -475,7 +513,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_footnote {
+#knwkcvligf .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -484,7 +522,7 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#fwmlnvmadz .gt_sourcenotes {
+#knwkcvligf .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -498,7 +536,7 @@ window.Quarto = {
   border-right-color: #D3D3D3;
 }
 
-#fwmlnvmadz .gt_sourcenote {
+#knwkcvligf .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -506,72 +544,72 @@ window.Quarto = {
   padding-right: 5px;
 }
 
-#fwmlnvmadz .gt_left {
+#knwkcvligf .gt_left {
   text-align: left;
 }
 
-#fwmlnvmadz .gt_center {
+#knwkcvligf .gt_center {
   text-align: center;
 }
 
-#fwmlnvmadz .gt_right {
+#knwkcvligf .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#fwmlnvmadz .gt_font_normal {
+#knwkcvligf .gt_font_normal {
   font-weight: normal;
 }
 
-#fwmlnvmadz .gt_font_bold {
+#knwkcvligf .gt_font_bold {
   font-weight: bold;
 }
 
-#fwmlnvmadz .gt_font_italic {
+#knwkcvligf .gt_font_italic {
   font-style: italic;
 }
 
-#fwmlnvmadz .gt_super {
+#knwkcvligf .gt_super {
   font-size: 65%;
 }
 
-#fwmlnvmadz .gt_footnote_marks {
+#knwkcvligf .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#fwmlnvmadz .gt_asterisk {
+#knwkcvligf .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#fwmlnvmadz .gt_indent_1 {
+#knwkcvligf .gt_indent_1 {
   text-indent: 5px;
 }
 
-#fwmlnvmadz .gt_indent_2 {
+#knwkcvligf .gt_indent_2 {
   text-indent: 10px;
 }
 
-#fwmlnvmadz .gt_indent_3 {
+#knwkcvligf .gt_indent_3 {
   text-indent: 15px;
 }
 
-#fwmlnvmadz .gt_indent_4 {
+#knwkcvligf .gt_indent_4 {
   text-indent: 20px;
 }
 
-#fwmlnvmadz .gt_indent_5 {
+#knwkcvligf .gt_indent_5 {
   text-indent: 25px;
 }
 
-#fwmlnvmadz .katex-display {
+#knwkcvligf .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#fwmlnvmadz div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#knwkcvligf div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -579,10 +617,11 @@ window.Quarto = {
 <table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
 <caption><strong>Table 1. Summary of Participant Characteristics by Smoking Status</strong></caption>
 <colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
 </colgroup>
 <thead>
 <tr class="gt_col_headings header">
@@ -593,6 +632,7 @@ N = 5,000<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 N = 789<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
 <th id="stat_2" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>No</strong><br>
 N = 4,211<span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
+<th id="p.value" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col"><strong>p-value</strong><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
 </tr>
 </thead>
 <tbody class="gt_table_body">
@@ -601,33 +641,64 @@ N = 4,211<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <td class="gt_row gt_center" headers="stat_0">2,774 (55%)</td>
 <td class="gt_row gt_center" headers="stat_1">436 (55%)</td>
 <td class="gt_row gt_center" headers="stat_2">2,338 (56%)</td>
+<td class="gt_row gt_center" headers="p.value">&gt;0.9</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label" style="font-weight: bold">Age (yrs)</td>
 <td class="gt_row gt_center" headers="stat_0">44 (15)</td>
 <td class="gt_row gt_center" headers="stat_1">43 (15)</td>
 <td class="gt_row gt_center" headers="stat_2">44 (15)</td>
+<td class="gt_row gt_center" headers="p.value">0.3</td>
 </tr>
 <tr class="odd">
 <td class="gt_row gt_left" headers="label" style="font-weight: bold">Cardiac events</td>
 <td class="gt_row gt_center" headers="stat_0">250 (5.0%)</td>
 <td class="gt_row gt_center" headers="stat_1">133 (17%)</td>
 <td class="gt_row gt_center" headers="stat_2">117 (2.8%)</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
 </tr>
 <tr class="even">
 <td class="gt_row gt_left" headers="label" style="font-weight: bold">Medical cost ($USD)</td>
 <td class="gt_row gt_center" headers="stat_0">9,166 (421)</td>
 <td class="gt_row gt_center" headers="stat_1">9,663 (395)</td>
 <td class="gt_row gt_center" headers="stat_2">9,072 (355)</td>
+<td class="gt_row gt_center" headers="p.value">&lt;0.001</td>
 </tr>
 </tbody><tfoot class="gt_footnotes">
 <tr class="odd">
-<td colspan="4" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> n (%); Mean (SD)</td>
+<td colspan="5" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> n (%); Mean (SD)</td>
+</tr>
+<tr class="even">
+<td colspan="5" class="gt_footnote"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> Pearson’s Chi-squared test; Welch Two Sample t-test</td>
 </tr>
 </tfoot>
 
 </table>
 
+</div>
+</div>
+</div>
+</section>
+<section id="figure-1.-predicted-probability-of-cardiac-events" class="level2">
+<h2 class="anchored" data-anchor-id="figure-1.-predicted-probability-of-cardiac-events">Figure 1. Predicted Probability of Cardiac Events</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Assignment4_files/figure-html/Regression%20figure%201-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="figure-2.-predicted-medical-cost" class="level2">
+<h2 class="anchored" data-anchor-id="figure-2.-predicted-medical-cost">Figure 2. Predicted Medical Cost</h2>
+<div class="cell">
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="Assignment4_files/figure-html/Regression%20figure%202-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
 </div>
 </div>
 </div>
@@ -639,10 +710,27 @@ N = 4,211<span class="gt_footnote_marks" style="white-space:nowrap;font-style:it
 <section id="disclaimer" class="level2">
 <h2 class="anchored" data-anchor-id="disclaimer">Disclaimer</h2>
 <p>I did not use generative AI technology to complete any portion of the work.</p>
+
 </section>
 </section>
 
-</main>
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Ambrose2004" class="csl-entry" role="listitem">
+Ambrose, John A, and Rajat S Barua. 2004. <span>“The Pathophysiology of Cigarette Smoking and Cardiovascular Disease.”</span> <em>Journal of the American College of Cardiology</em> 43 (10): 1731–37. <a href="https://doi.org/10.1016/j.jacc.2003.12.047">https://doi.org/10.1016/j.jacc.2003.12.047</a>.
+</div>
+<div id="ref-Gallucci2020" class="csl-entry" role="listitem">
+Gallucci, Giuseppina, Alfredo Tartarone, Rosa Lerose, Anna Vittoria Lalinga, and Alba Maria Capobianco. 2020. <span>“Cardiovascular Risk of Smoking and Benefits of Smoking Cessation.”</span> <em>Journal of Thoracic Disease</em> 12 (7): 3866–76. <a href="https://doi.org/10.21037/jtd.2020.02.47">https://doi.org/10.21037/jtd.2020.02.47</a>.
+</div>
+<div id="ref-Huxley2011" class="csl-entry" role="listitem">
+Huxley, Rachel R, and Mark Woodward. 2011. <span>“Cigarette Smoking as a Risk Factor for Coronary Heart Disease in Women Compared with Men: A Systematic Review and Meta-Analysis of Prospective Cohort Studies.”</span> <em>The Lancet</em> 378 (9799): 1297–1305. <a href="https://doi.org/10.1016/s0140-6736(11)60781-2">https://doi.org/10.1016/s0140-6736(11)60781-2</a>.
+</div>
+<div id="ref-Xu2015" class="csl-entry" role="listitem">
+Xu, Xin, Ellen E. Bishop, Sara M. Kennedy, Sean A. Simpson, and Terry F. Pechacek. 2015. <span>“Annual Healthcare Spending Attributable to Cigarette Smoking.”</span> <em>American Journal of Preventive Medicine</em> 48 (3): 326–33. <a href="https://doi.org/10.1016/j.amepre.2014.10.012">https://doi.org/10.1016/j.amepre.2014.10.012</a>.
+</div>
+<div id="ref-Xu2021" class="csl-entry" role="listitem">
+Xu, Xin, Sundar S. Shrestha, Katrina F. Trivers, Linda Neff, Brian S. Armour, and Brian A. King. 2021. <span>“U.S. Healthcare Spending Attributable to Cigarette Smoking in 2014.”</span> <em>Preventive Medicine</em> 150 (September): 106529. <a href="https://doi.org/10.1016/j.ypmed.2021.106529">https://doi.org/10.1016/j.ypmed.2021.106529</a>.
+</div>
+</div></section></div></main>
 <!-- /main column -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
