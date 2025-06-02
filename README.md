@@ -5,9 +5,10 @@ This project examines the relationship between smoking status, gender, and outco
 ## Project Files
 
 - `Assignment4.qmd` – Main Quarto file containing code, narrative, and formatted output
-- `cohort.csv` – Simulated dataset used for analysis
+- `Data` – Contains the simulated dataset cohort.csv used for analysis
 - `Assignment4.html` – Rendered HTML output of the report
 - `references.bib` – Bibliography file for citations (if applicable)
+- `images` - attached picture files
 
 ## 🛠 Installation
 
