@@ -10,7 +10,7 @@ This project examines the relationship between smoking status, gender, and outco
 - `references.bib` – Bibliography file for citations (if applicable)
 - `images` - attached picture files
 
-## 🛠 Installation
+## Packages Installation
 
 To run this project, you'll need R (≥ 4.0.0) and RStudio. All required packages can be installed using:
 
