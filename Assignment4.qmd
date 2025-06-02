@@ -1,5 +1,5 @@
 ---
-title: "Assignment 4: Cohort Analysis"
+title: "HRP 203 Assignment 4: Cohort Analysis"
 author: Jackie Chen
 format: html
 editor: visual
@@ -18,17 +18,6 @@ Create a 4 to 6 page Quarto reproducible report, in prose, in a repository on yo
 
 -   discussion
 
-```{r}
-#| label: load-packages
-#| include: false
-library(tidyverse)
-library(dplyr)
-library(gtsummary)
-library(gt)
-library(ggeffects) 
-library(ggplot2) 
-library(modelsummary)
-```
 
 ```{r}
 #| label: load-dataset
